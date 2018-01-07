@@ -1,4 +1,4 @@
-public class Variaveis {
+﻿public class Variaveis {
 
   public static void main(String[] args){
 
@@ -24,7 +24,7 @@ public class Variaveis {
 
                 int             Integer             4 bytes   ( -2 147 483 648 ) á ( 2 147 483 647 )
 
-                long             long               8 bytes   ( -4 611 686 018 427 387 904 ) á ( 4 611 686 018 427 387 903 )
+                long             Long               8 bytes   ( -4 611 686 018 427 387 904 ) á ( 4 611 686 018 427 387 903 )
 
       ************************************************************************************************************************
 
