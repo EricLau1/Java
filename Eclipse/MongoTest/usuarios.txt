@@ -1,0 +1,7 @@
+db.usuarios.insert([
+	{userId: 1, nome: "Jane Doe", idade: NumberInt(26), curso: "MongoDB"},
+	{userId: 2, nome: "Jon Doe", idade: NumberInt(25), curso: "Java"},
+	{userId: 3, nome: "Ana", idade: NumberInt(18), curso: "C++"},
+	{userId: 4, nome: "Bob", idade: NumberInt(20), curso: "MySQL"},
+	{userId: 5, nome: "Valentina", idade: NumberInt(23), curso: "Python"}
+]);
