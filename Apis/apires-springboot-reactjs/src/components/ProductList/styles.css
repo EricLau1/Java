@@ -1,0 +1,8 @@
+.table-products,
+.table-products th,
+.table-products tr,
+.table-products td {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-collapse: collapse;
+}
