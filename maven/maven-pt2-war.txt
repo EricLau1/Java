@@ -1,0 +1,217 @@
+Abra o eclipse.
+
+- New
+
+- Maven project
+
+	- Next
+
+	Catalog:
+	
+		- org.apache.maven.archetypes maven-archetype-webapp 1.0
+
+	- Next
+
+	Group Id:
+
+		br.com.eric.maven
+
+	Artifact Id:
+
+		webstore
+
+
+	Version:
+
+		1.0.0-SNAPSHOT
+
+
+	- FINISH.
+
+
+
+Adicionando um plugin do servidor remoto JETTY ao projeto.
+
+
+Site ->  https://www.eclipse.org/jetty/documentation/9.4.x/jetty-maven-plugin.html#jetty-run-goal
+
+Adicionando o plugin ao 'pom.xml':
+
+	<build>
+		<finalName>webstore</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.3.0.M0</version>
+			</plugin>
+		</plugins>
+	</build>
+
+
+
+Para rodar o JETTY.
+
+Acesse o diretório do projeto.
+
+Comando:
+
+	$ mvn jetty:run
+
+
+
+Corrigindo a mensagem de erro.
+
+Adicione a dependência do Servelet ao 'pom.xml':
+
+
+
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>3.1.0</version>
+	</dependency>
+
+
+Site -->  https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api/3.1.0
+
+
+Modificando o arquivo 'web.xml' para a versão 3.1:
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+</web-app>
+
+
+O arquivo 'web.xml' fica no diretório [WEB-INF].
+
+Site de referência --> https://www.mkyong.com/web-development/the-web-xml-deployment-descriptor-examples/
+
+Crie o diretório para as classes Java dentro do diretório 'src/main/'.
+
+	Crie o pacote 'br.com.eric.maven.webstore'.
+
+	Crie a class ContactServlet:
+
+
+
+	package br.com.eric.maven.webstore;
+	
+	import java.io.IOException;
+	import java.io.PrintWriter;
+	
+	import javax.servlet.ServletException;
+	import javax.servlet.annotation.WebServlet;
+	import javax.servlet.http.HttpServlet;
+	import javax.servlet.http.HttpServletRequest;
+	import javax.servlet.http.HttpServletResponse;
+	
+	@WebServlet(urlPatterns={"/contato"})
+	public class ContactServlet extends HttpServlet {
+	
+		@Override
+		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			PrintWriter writer = resp.getWriter();
+			writer.print("<html><h2> Entre em contato </h2></html>");
+			writer.close();
+		}
+		
+	}
+
+
+É necessário refazer o comando do JETTY para rodar a nova página:
+
+	$ mvn jetty:run
+
+	Para não precisar refazer este comando todas as vezes que houver alguma modificação
+	nos arquivos, adicione as configurações no plugin do JETTY dentro do 'pom.xml':
+
+
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.3.0.M0</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+				</configuration>
+			</plugin>
+		</plugins>
+
+
+
+	Nesta configuração, a cada 10 segundos o JETTY irá verificar se existe alteração nos arquivos e já irá
+	recompilar o servidor para mostrar as alterações nas páginas.
+
+	Para adicionar um path padrão que ficará antes de qualquer outro path de requisição:
+
+
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.3.0.M0</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/store</contextPath>
+					</webApp>
+				</configuration>
+			</plugin>
+
+
+	Nesta configuração todas as requisições agora devem seguir o padrão:
+
+		http://localhost:8080/loja
+
+	Exemplo:
+
+		http://localhost:8080/loja/contato
+
+
+
+Gerar o arquivo 'war':
+
+	$ mvn package.
+
+Observação: Rode o comand 'mvn clean' antes de executar o 'mvn package' para limpar possiveis sujeiras.
+
+
+Adicionando o projeto de produtos as dependencias do projeto web:
+
+	<dependency>
+		<groupId>br.com.eric.maven</groupId>
+		<artifactId>produtos</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</dependency>
+
+
+Observação: O projeto so irá funcionar porque o eclipse identifica o projeto produtos dentro dele
+Porém o maven não conseguem reconhecer o projeto.
+
+Para que o projeto produtos fique disponível globalmente, acesse seu diretório e execute o comando:
+
+	$ mvn install
+
+
+
+Entendendo a Tag <scope> das dependencias do Maven:
+
+
+<scope> compile </scope> -> E colocada por padrão no arquivo pom.xml e será repassada para outros projetos caso seja requisitada.
+
+
+<scope> test </scope> -> Só roda na fase de teste e não é repassada para outros projetos.
+
+
+<scope> provided </scope> -> Só é usado na fase de compilação, é ignorada na fase de execução.
+
+<scope> runtime </scope> -> Só é usando quando o projeto estiver executando (rodando).
+	
+
+
+

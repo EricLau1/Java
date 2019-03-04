@@ -1,0 +1,158 @@
+MAVEN
+
+Download:
+
+https://maven.apache.org/download.cgi
+
+Descompate a pasta.
+
+Setar a variavel de ambiente para a pasta 'bin' do maven.
+
+	Exemplo:
+
+	export PATH=$PATH:/home/eric/Development/apache-maven-3.6.0/bin
+
+Reinicie o terminal.
+
+Comando para ver a versão do Maven:
+
+	$ mvn -v
+
+Gerando um projeto simples com o Maven:
+
+	Exemplo de projeto de produtos:
+
+	$ mvn archetype:generate -DartifactId=produtos -DgroupId=br.com.eric.maven -DinteractiveMode=false -DarchetypeArtifactId=maven-archetype-quickstart
+
+Observação: No Windows, talvez seja necessário utilizar aspas duplas (" ") nos parâmetros -D
+
+Compilando projeto com Maven:
+
+	Acesse o diretorio do projeto e execute o comando:
+
+	$ mvn compile
+
+	Os binários serão gerados no diretório target.
+
+Rodar os testes:
+
+	$ mvn test
+
+Limpar o diretorio target:
+
+	$ mvn clean
+
+Gerando relatorios HTML:
+
+	$ mvn surefire-report:report
+
+	O relatório gerado com HTML esta no diretorio '../target/site'.
+
+
+Site para buscar dependencias atualizadas para o Maven --> https://mvnrepository.com/
+
+
+Executando comandos sem atualizar as versões das dependências:
+
+	$ mvn -o test
+
+	$ mvn -o compile
+
+	Obs: o parametro (-o) significa offline, ou seja, ele não irá baixar nada quando o comando for executado.
+
+
+Repositório central onde o maven --> http://central.maven.org/maven2/
+
+Diretório global onde ficam as dependências do Maven:
+
+	$ cd ~/.m2/repository 
+
+
+Fases do Maven:
+
+Documentação: https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+
+
+Buildar um projeto maven:
+
+	$ mvn validate
+
+	$ mvn compile
+
+	$ mvn test
+
+	$ mvn package
+
+	$ mvn verify
+
+	$ mvn install 
+
+	$ mvn deploy
+
+Forçar uma fase ignorando o TEST:
+
+	$ mvn -DskipTests=true package
+
+Gerar Relatório com PMD:
+
+	$ mvn pmd:pmd
+
+
+Adicionar um pluguin que será executado automaticamente em uma das fases do maven.
+
+Editando o arquivo pom.xml:
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.11.0</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals> 
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+
+O plugin 'check' do 'pmd' será executado na fase de 'verify' do maven.
+
+Comando:
+
+	$ mvn verify
+
+
+Relatório com JACOCO:
+
+Site --> https://www.eclemma.org/jacoco/trunk/doc/maven.html
+
+Rodando o comando help:
+
+	$ mvn jacoco:help
+
+Preparando o pluguin no 'pom.xml' para gerar o relatorio:
+
+
+
+	<plugin>
+		<groupId>org.jacoco</groupId>
+		<artifactId>jacoco-maven-plugin</artifactId>
+		<version>0.8.3</version>
+		<executions>
+			<execution>
+				<goals>
+					<goal>prepare-agent</goal>
+					<goal>report</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
+
+
